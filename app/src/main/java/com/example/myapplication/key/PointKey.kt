@@ -19,7 +19,10 @@ class PointKey(private val symbol: String) : Key {
     private fun count(display: String): String {
         return if (display == "0.0" || display == "0") {
             return "0."
-        }else{
+        }//存在小数点
+        else if (symbol == "." && display.contains(".")) {
+            display
+        } else {
             display + symbol
         }
     }
