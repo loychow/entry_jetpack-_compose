@@ -48,7 +48,7 @@ private val buttons = arrayOf(
     ),
     arrayOf(
         NumericKey("0") to G3,
-        NumericKey(".") to G3,
+        PointKey(".") to G3,
         CalculationKey() to O2
     )
 )
