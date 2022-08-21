@@ -7,15 +7,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.myapplication.MainActivity
-import com.example.myapplication.arithmetic.OperationID
+import com.example.myapplication.key.OperationID
 import com.example.myapplication.key.*
 import com.example.myapplication.ui.theme.B1
 import com.example.myapplication.ui.theme.G3
@@ -73,7 +71,11 @@ fun Calculator(
             contentAlignment = Alignment.BottomEnd
         )
         {
-            Text(record.display, fontSize = 100.sp, color = Color.White)
+            Text(
+                record.removeDecimals(record.display),
+                fontSize = 100.sp,
+                color = Color.White
+            )
         }
         Column(Modifier.fillMaxSize()) {
             buttons.forEach {
@@ -99,9 +101,12 @@ fun Calculator(
                             }
                             if (it.first is CalculationKey) {
                                 //todo save record
-                                Log.d("CalculationKey",r.toString())
+                                Log.d("CalculationKey", r.toString())
 //                                r = r.copy(factor1 = r.result, factor2 = r.display.toInt())
-                                r = r.copy(factor1 = r.result, factor2 = r.display.toInt())
+                                r = r.copy(
+                                    factor1 = r.factor2,
+                                    factor2 = r.result
+                                )
                             }
                             onRecordChange(r)
                         }

@@ -1,5 +1,6 @@
-package com.example.myapplication.arithmetic
+package com.example.myapplication.key
 
+import com.example.myapplication.arithmetic.*
 import java.util.*
 
 enum class OperationID(val symbol: String, val arithmetic: Arithmetic) {
