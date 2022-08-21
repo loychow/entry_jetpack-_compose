@@ -24,8 +24,8 @@ import com.example.myapplication.ui.viewmodle.Record
 private val buttons = arrayOf(
     arrayOf(
         ClearOrClearAllKey() to LG4,
-        NumericKey("+/-") to LG4,
-        NumericKey("%") to LG4,
+        ReverseKey("+/-") to LG4,
+        PercentageKey("%") to LG4,
         QuaternionOperatorKey(OperationID.DIVIDE) to O2
     ),
     arrayOf(
@@ -47,7 +47,7 @@ private val buttons = arrayOf(
         QuaternionOperatorKey(OperationID.ADD) to O2
     ),
     arrayOf(
-        NumericKey() to G3,
+        NumericKey("0") to G3,
         NumericKey(".") to G3,
         CalculationKey() to O2
     )
@@ -58,7 +58,8 @@ fun Calculator(
     record: Record,
     onRecordChange: (Record) -> Unit = {}
 ) {
-    var state by remember { mutableStateOf(KeyState.DEFAULT) }
+    var stateAC by remember { mutableStateOf(getKeyStateOfRecord(record)) }
+    var stateOPT by remember { mutableStateOf(record.shouldReset) }
     Column(
         Modifier
             .background(B1)
@@ -71,6 +72,7 @@ fun Calculator(
             contentAlignment = Alignment.BottomEnd
         )
         {
+            stateAC = getKeyStateOfRecord(record)
             Text(
                 record.removeDecimals(record.display),
                 fontSize = 100.sp,
@@ -90,23 +92,31 @@ fun Calculator(
                                 .weight(if (it.first.getSymbol() == "0") 2f else 1f)
                                 .aspectRatio(if (it.first.getSymbol() == "0") 2f else 1f)
                                 .background(it.second),
-                            it.first.getSymbol()
-                        ) {
-                            var r: Record
-                            if (it.first is ShiftKey) {
-                                state = state.shift()
-                                r = (it.first as ShiftKey).exercise(record, state)
+                            if (it.first is ClearOrClearAllKey) {
+                                (it.first as ShiftKey).getSymbol(stateAC)
                             } else {
-                                r = it.first.exercise(record)
+                                it.first.getSymbol()
+                            }
+                        ) {
+
+                            var r: Record
+                            if (it.first is ClearOrClearAllKey) {
+                                r = (it.first as ShiftKey).exercise(record, stateAC)
+                                stateAC = stateAC.shift()
+                            } else {
+                                r = it.first.exercise(record, stateOPT)
                             }
                             if (it.first is CalculationKey) {
-                                //todo save record
                                 Log.d("CalculationKey", r.toString())
-//                                r = r.copy(factor1 = r.result, factor2 = r.display.toInt())
                                 r = r.copy(
                                     factor1 = r.factor2,
                                     factor2 = r.result
                                 )
+                            }
+                            if (it.first is NumericKey) {
+                                stateOPT = false;
+                            } else if (it.first is QuaternionOperatorKey || it.first is CalculationKey) {
+                                stateOPT = true
                             }
                             onRecordChange(r)
                         }
@@ -117,6 +127,13 @@ fun Calculator(
     }
 }
 
+fun getKeyStateOfRecord(record: Record): KeyState {
+    return if (record.display != "0.0" && record.display != "0") {
+        KeyState.SHIFT
+    } else {
+        KeyState.DEFAULT
+    }
+}
 
 @Composable
 fun CalculatorButton(modifier: Modifier, symbol: String, onClick: () -> Unit = {}) {

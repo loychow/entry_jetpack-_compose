@@ -10,7 +10,7 @@ data class Record(
     var factor2: Double,
 
     var result: Double,
-//
+
     var display: String,
 
     var shouldReset:Boolean
@@ -21,7 +21,7 @@ data class Record(
 
     companion object {
         fun default(): Record {
-            return Record(0.0, OperationID.NON, 0.0, 0.0, "0",false)
+            return Record(0.0, OperationID.NON, 0.0, 0.0, "0.0",false)
         }
     }
 
@@ -37,7 +37,5 @@ data class Record(
         factor1 = factor2
         factor2 = display.toDouble()
     }
-//    override fun toString():String{
-//        return "factor1=$factor1,opt$opt,factor2=$factor2,result=$result,display$display}"
-//    }
+
 }

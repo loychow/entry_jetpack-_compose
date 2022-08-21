@@ -4,7 +4,7 @@ import com.example.myapplication.ui.viewmodle.Record
 
 interface Key {
 
-    fun exercise(record: Record): Record {
+    fun exercise(record: Record, justSetSymbol: Boolean = false): Record {
         return Record.default()
     }
 

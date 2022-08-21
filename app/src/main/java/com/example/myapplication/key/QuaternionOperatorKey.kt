@@ -3,8 +3,10 @@ package com.example.myapplication.key
 import com.example.myapplication.ui.viewmodle.Record
 
 class QuaternionOperatorKey(private val operationID: OperationID) : Key {
-    override fun exercise(record: Record): Record {
-        //没填过操作符
+    override fun exercise(record: Record,justSetSymbol: Boolean): Record {
+        if (justSetSymbol) {
+            return record.copy(opt = operationID)
+        }
 
         if (record.opt != OperationID.NON/*todo 考虑同操作符类型*/) {
             record.offsetOne()
