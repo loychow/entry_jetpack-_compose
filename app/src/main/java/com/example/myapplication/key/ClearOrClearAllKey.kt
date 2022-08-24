@@ -8,7 +8,7 @@ class ClearOrClearAllKey(private var symbol: String = "AC") : ShiftKey, Key {
         return if (state == KeyState.DEFAULT) (
                 Record.default()
                 ) else {
-            record.copy(display = "0", factor2 = 0.0)
+            record.copy(display = "0")
         }
     }
 
