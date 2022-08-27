@@ -6,7 +6,7 @@ import com.example.myapplication.ui.viewmodle.Record
 interface Key {
 
     fun exercise(record: Record, justSetSymbol: Boolean = false): Record {
-        return Record.default()
+        return record
     }
     //获取显示符
     fun getSymbol(): String
