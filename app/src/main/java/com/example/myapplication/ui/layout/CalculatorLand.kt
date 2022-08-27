@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.key.*
@@ -26,6 +27,7 @@ import com.example.myapplication.ui.theme.Orange
 import com.example.myapplication.ui.viewmodle.Record
 import kotlinx.coroutines.delay
 
+//横屏时的数据
 private val keysLand = arrayOf(
     arrayOf(
         OtherKey(DarkGray),
@@ -88,6 +90,7 @@ private val keysLand = arrayOf(
     )
 )
 
+//竖屏时的数据
 private val keys = arrayOf(
     arrayOf(
         ClearOrClearAllKey(LightGray),
@@ -121,32 +124,7 @@ private val keys = arrayOf(
 )
 
 @Composable
-fun CalculatorLand(
-    record: Record,
-    isExpandedScreen: Boolean,
-    onRecordChange: (Record) -> Unit = {}
-) {
-    var landed: Boolean by remember {
-        mutableStateOf(false)
-    }
-
-    //控制笔刷
-    suspend fun showLandAnimation() {
-        if (!landed) {
-            landed = true
-            delay(1000L)
-            landed = false
-        }
-    }
-    LaunchedEffect(Unit) {
-        showLandAnimation()
-    }
-
-    ShowExpandedScreen(record, isExpandedScreen, onRecordChange)
-}
-
-@Composable
-fun ShowExpandedScreen(
+fun Calculator(
     record: Record,
     isExpandedScreen: Boolean,
     onRecordChange: (Record) -> Unit
@@ -179,7 +157,7 @@ fun ShowExpandedScreen(
         {
             Text(
                 record.removeDecimals(record.display),
-                fontSize = if (isExpandedScreen) 50.sp else 100.sp,
+                fontSize = fontSizeAdapterOfTopBox(isExpandedScreen, record.display),
                 color = Color.White,
                 maxLines = if (isExpandedScreen) 1 else Int.MAX_VALUE
             )
@@ -244,7 +222,7 @@ fun KeyboardRow(
 }
 
 
-//要响应landed: Boolean,要改颜色,要改字,要响应record改变时间
+//button
 @Composable
 fun CalculatorButton(
     record: Record,
@@ -261,10 +239,10 @@ fun CalculatorButton(
         mutableStateOf(KeyState.DEFAULT)
     }
     //clear/allClear的切换
-    var stateAC by rememberSaveable { mutableStateOf(getKeyStateOfRecordLand(record)) }
+    var stateAC by rememberSaveable { mutableStateOf(getACKeyStateOfRecord(record)) }
 
     if (key is ClearOrClearAllKey) {
-        stateAC = getKeyStateOfRecordLand(record)
+        stateAC = getACKeyStateOfRecord(record)
         keyState = stateAC
     }
     //四则运算符选中状态
@@ -322,15 +300,19 @@ fun eventHandler(
 ) {
     var r: Record
     var shouldDisplayReset = record.shouldDisplayReset
+    //按键的状态切换例如AC
     if (key is ShiftKey) {
         r = key.exercise(record, keyState)
     } else {
         r = key.exercise(record, shouldDisplayReset)
     }
+
     //计算
     if (key is NumericKey) {
         shouldDisplayReset = false
     }
+
+    //标记什么时候需要重头拼写
     if (key is QuaternionOperatorKey || key is CalculationKey) {
         shouldDisplayReset = true
     }
@@ -396,10 +378,23 @@ fun parseModifierBy(isExpandedScreen: Boolean, key: Key): Float {
     }
 }
 
-fun getKeyStateOfRecordLand(record: Record): KeyState {
+//从record中获取AC键的状态
+fun getACKeyStateOfRecord(record: Record): KeyState {
     return if (record.display != "0.0" && record.display != "0") {
         KeyState.SHIFT
     } else {
         KeyState.DEFAULT
+    }
+}
+//显示数字的字体大小随长度变化
+fun fontSizeAdapterOfTopBox(isExpandedScreen: Boolean, display: String): TextUnit {
+    return if (isExpandedScreen) {
+        50.sp
+    } else {
+        when (display.length) {
+            in 1..6 -> 100.sp
+            in 7..9 -> 70.sp
+            else -> 50.sp
+        }
     }
 }

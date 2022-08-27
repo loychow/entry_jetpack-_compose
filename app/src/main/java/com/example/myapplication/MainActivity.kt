@@ -11,7 +11,7 @@ import androidx.compose.runtime.*
 import com.example.myapplication.ui.viewmodle.Record
 import com.example.myapplication.ui.viewmodle.RecordViewModel
 import androidx.compose.runtime.livedata.observeAsState
-import com.example.myapplication.ui.layout.CalculatorLand
+import com.example.myapplication.ui.layout.Calculator
 
 
 class MainActivity : ComponentActivity() {
@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
         //调试的机型为Pixel 4 XL API 29,这宽度判断不知道是否适配其他机型
         val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
         val recordState: Record by recordViewModel.record.observeAsState(Record.default())
-        CalculatorLand(
+        Calculator(
             recordState,
             isExpandedScreen,
             onRecordChange = { recordViewModel.onStateChanged(it) })

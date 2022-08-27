@@ -7,10 +7,12 @@
     UI布局参考了王鹏老师直播时的使用布局方式，使用逻辑跟ios手机上的计算器相近。
     计算器实现了:
     四则运算；
-    clear/clearAll; 
+    切换clear/clearAll; 
     取反；
     百分比；
     小数；
+    数字的字体随长度变化；
+    高亮运算符
 
 ![](screenshot/Screenshot_20220827_220344.png)
 
