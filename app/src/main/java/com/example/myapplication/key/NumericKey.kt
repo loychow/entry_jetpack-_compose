@@ -1,13 +1,17 @@
 package com.example.myapplication.key
 
+import androidx.compose.ui.graphics.Color
 import com.example.myapplication.ui.viewmodle.Record
 
-class NumericKey(private val symbol: String = "0.0") : Key {
+class NumericKey(
+    private val color: Color,
+    private val symbol: String = "0.0"
+) : Key {
     override fun exercise(record: Record, justSetSymbol: Boolean): Record {
         var currentDisplay: String = record.display
-        if (record.shouldReset) {
+        if (record.shouldDisplayReset) {
             currentDisplay = "0.0"
-            record.shouldReset = false
+            record.shouldDisplayReset = false
         }
         return record.copy(display = count(currentDisplay))
     }
@@ -17,10 +21,14 @@ class NumericKey(private val symbol: String = "0.0") : Key {
     }
 
     private fun count(display: String): String {
-        return if (display == "0.0"||display == "0") {
+        return if (display == "0.0" || display == "0") {
             symbol
         } else {
             display + symbol
         }
+    }
+
+    override fun getColor(): Color {
+        return color
     }
 }

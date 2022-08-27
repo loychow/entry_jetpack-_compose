@@ -13,7 +13,7 @@ data class Record(
 
     var display: String,
 
-    var shouldReset:Boolean
+    var shouldDisplayReset:Boolean
 ) {
     override fun toString(): String {
         return "$factor1 ${opt.symbol} $factor2 = $result; display=$display"

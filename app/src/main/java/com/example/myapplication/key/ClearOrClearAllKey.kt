@@ -1,9 +1,13 @@
 package com.example.myapplication.key
 
+import androidx.compose.ui.graphics.Color
 import com.example.myapplication.ui.viewmodle.Record
 
 
-class ClearOrClearAllKey(private var symbol: String = "AC") : ShiftKey, Key {
+class ClearOrClearAllKey(
+    private val color: Color,
+    private val symbol: String = "AC",
+) : ShiftKey {
     override fun exercise(record: Record, state: KeyState): Record {
         return if (state == KeyState.DEFAULT) (
                 Record.default()
@@ -12,16 +16,15 @@ class ClearOrClearAllKey(private var symbol: String = "AC") : ShiftKey, Key {
         }
     }
 
-    override fun getSymbol(state: KeyState): String {
-        return if (state == KeyState.DEFAULT) (
-                "AC"
-                ) else {
-            "C"
-        }
+    override fun shiftSymbol(): String {
+        return "C"
     }
 
     override fun getSymbol(): String {
         return symbol
     }
 
+    override fun getColor(): Color {
+        return color
+    }
 }

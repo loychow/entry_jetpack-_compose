@@ -1,8 +1,13 @@
 package com.example.myapplication.key
 
+import androidx.compose.ui.graphics.Color
 import com.example.myapplication.ui.viewmodle.Record
 
-class ReverseKey(private val symbol: String) : Key {
+class ReverseKey(
+    private val color: Color,
+    private val symbol: String
+
+) : Key {
     override fun exercise(record: Record, justSetSymbol: Boolean): Record {
         return if (record.display == "0.0" || record.display == "0") {
             record
@@ -17,5 +22,9 @@ class ReverseKey(private val symbol: String) : Key {
 
     override fun getSymbol(): String {
         return symbol
+    }
+
+    override fun getColor(): Color {
+        return color
     }
 }

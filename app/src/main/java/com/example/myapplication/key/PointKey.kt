@@ -1,13 +1,18 @@
 package com.example.myapplication.key
 
+import androidx.compose.ui.graphics.Color
 import com.example.myapplication.ui.viewmodle.Record
 
-class PointKey(private val symbol: String) : Key {
+class PointKey(
+    private val color: Color,
+    private val symbol: String
+
+) : Key {
     override fun exercise(record: Record, justSetSymbol: Boolean): Record {
         var currentDisplay: String = record.display
-        if (record.shouldReset) {
+        if (record.shouldDisplayReset) {
             currentDisplay = "0.0"
-            record.shouldReset = false
+            record.shouldDisplayReset = false
         }
         return record.copy(display = count(currentDisplay))
     }
@@ -25,5 +30,9 @@ class PointKey(private val symbol: String) : Key {
         } else {
             display + symbol
         }
+    }
+
+    override fun getColor(): Color {
+        return color
     }
 }
